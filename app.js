@@ -11,6 +11,7 @@ const flash = require('connect-flash');
 const validator = require('express-validator');
 //const MongoStore = require('mongo-connection')(session);
 const MongoStore = require('connect-mongo')(session);
+const User = require('./models/usuario'); // Ajusta la ruta según la ubicación de tu archivo usuario.js
 
 
 //manage views partials hbs
@@ -23,8 +24,40 @@ var productRouter = require('./routes/producto')
 
 var app = express();
 
-//Database mongo connection
-mongoose.connect('mongodb://localhost:27017/shopping');
+
+mongoose.connect('mongodb://localhost:27017/carrito', { useNewUrlParser: true, useUnifiedTopology: true });
+   
+    const defaultAdmin = {
+      email: 'admin@example.com',
+      nombre: 'Admin',
+      password: 'admin123', 
+      admin: 1
+  };
+  
+  User.findOne({ email: defaultAdmin.email }, (err, existingUser) => {
+      if (err) {
+          console.error(err);
+          return;
+      }
+  
+      if (!existingUser) {
+          const newUser = new User(defaultAdmin);
+          newUser.password = newUser.encryptPassword(defaultAdmin.password);
+  
+          newUser.save((err) => {
+              if (err) {
+                  console.error(err);
+                  return;
+              }
+              console.log('Usuario admin por defecto creado.');
+          });
+      } else {
+          console.log('Ya existe un usuario admin en la base de datos.');
+      }
+  });
+
+
+
 require('./config/passport');
 
 
@@ -73,25 +106,20 @@ app.use((req, res, next) => {
   next();
 })
 //routes use
-app.use('/user', userRouter);
+app.use('/usuario', userRouter);
 app.use('/', indexRouter);
 app.use('/producto', productRouter)
 
-// catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
-
 
 module.exports = app;

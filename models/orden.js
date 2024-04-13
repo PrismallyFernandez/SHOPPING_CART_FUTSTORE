@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const cartSchema = require('../models/carro');
 
 var schema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    cart: {
+    cart:  {
         type: Object,
         required: true
     },
@@ -15,10 +16,6 @@ var schema = new Schema({
         required: true
     },
     name: {
-        type: String,
-        required: true
-    },
-    paymentId: {
         type: String,
         required: true
     }

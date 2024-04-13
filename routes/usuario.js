@@ -5,6 +5,11 @@ const passport = require('passport');
 const Product = require('../models/producto');
 const Cart = require('../models/carro');
 const Order = require('../models/orden');
+const User = require('../models/usuario');
+const usuario = require('../models/usuario');
+var auth = require('../config/auth');
+
+var isAdmin = auth.isAdmin;
 
 
 var csrfProtection = csrf();
@@ -32,12 +37,69 @@ router.get('/profile', isLoggedIn, (req, res, next) => {
     });
 });
 
+router.get('/user-list', isAdmin, async (req, res) => {
+    try {
+        const users = await User.find({}).lean()
+        console.log(users); 
+        res.render('user/vista-usuario', { users});
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error al obtener la lista de usuarios de la base de datos');
+    }
+});
+
+router.get('/borrar/:id', isAdmin, async (req, res) => {
+    try {
+        const userId = req.params.id;
+        await User.findByIdAndRemove(userId);
+        req.flash('successMessage', 'Usuario eliminado con éxito');
+        res.redirect('/usuario/user-list'); 
+    } catch (error) {
+        console.error(error);
+        req.flash('errorMessage', 'Error al eliminar el usuario');
+        res.status(500).send('Error al obtener la lista de usuarios de la base de datos');
+    }
+});
+
+// const renderEditForm = async (req, res) => {
+//     try {
+//       const usuario = await User.findById(req.params.id).lean();
+//       if (!usuario) {
+//         req.flash("error_msg", "Usuario no encontrado");
+//         return res.redirect("/usuario/user-list");
+//       }
+//       res.render("editar-usuario", { usuario });
+//     } catch (error) {
+//       console.error(error);
+//       req.flash("error_msg", "Error al obtener el usuario de la base de datos");
+//       res.redirect("/usuario/user-list");
+//     }
+//   };
+
+//   const updateUser = async (req, res) => {
+//     try {
+//       const { email, nombre} = req.body;
+//       await User.findByIdAndUpdate(req.params.id, { email , nombre });
+//       req.flash("successMessage", "Usuario actualizado exitosamente");
+//       res.redirect("/usuario/user-list");
+//     } catch (error) {
+//       console.error(error);
+//       req.flash("error_msg", "Error al actualizar el usuario");
+//       res.redirect("/usuario/user-list");
+//     }
+//   };
+  
+// router.get("/editar/:id", renderEditForm);
+
+// router.post("/editar-usuario/:id", updateUser);
+
+
+
 router.get('/logout', (req, res, next) => {
     req.logOut();
     res.redirect('/');
 });
 
-//middleware
 router.use('/', noLoggedIn, (req, res, next) => {
     next();
 });
@@ -53,8 +115,8 @@ router.get('/signup', (req, res, next) => {
 });
 
 router.post('/signup', passport.authenticate('local.signup', {
-    successRedirect: '/user/profile',
-    failureRedirect: '/user/signup',
+    successRedirect: '/',
+    failureRedirect: '/usuario/signup',
     failureFlash: true
 }), (req, res, next) => {
     if (req.session.oldUrl) {
@@ -62,7 +124,7 @@ router.post('/signup', passport.authenticate('local.signup', {
         req.session.oldUrl = null;
         res.redirect(oldUrl);
     } else {
-        res.redirect('/user/profile');
+        res.redirect('/usuario/profile');
     }
 });
 
@@ -78,7 +140,7 @@ router.get('/signin', (req, res, next) => {
 
 router.post('/signin', passport.authenticate('local.signin', {
     //successRedirect: '/user/profile',
-    failureRedirect: '/user/signin',
+    failureRedirect: '/usuario/signin',
     failureFlash: true
 }), (req, res, next) => {
     if (req.session.oldUrl) {
@@ -86,7 +148,7 @@ router.post('/signin', passport.authenticate('local.signin', {
         req.session.oldUrl = null;
         res.redirect(oldUrl);
     } else {
-        res.redirect('/user/profile');
+        res.redirect('/');
     }
 });
 

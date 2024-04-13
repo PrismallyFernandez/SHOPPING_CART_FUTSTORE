@@ -1,20 +1,63 @@
-<h1>Perfil Usuario</h1>
-<hr>
-<h2>Mis Órdenes</h2>
-{{# each orders}}
-<div class="card">
-    <div class="card-body">
-        <ul class="list-group">
-            {{# each this.items}}
-            <li class="list-group-item d-flex justify-content-between
-                align-items-center">
-                {{ this.item.title }} | {{ this.qty }} Units
-                <span class="badge badge-primary badge-pill">{{ this.price }}</span>
-            </li>
-            {{/each}}
-        </ul>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Usuario</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .order-card {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-price {
+            float: right;
+        }
+
+        .btn-primary {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container profile-container">
+        <h1 class="text-center">Perfil Usuario</h1>
+        <hr>
+        <h2>Mis Órdenes</h2>
+        {{# each orders}}
+        <div class="card order-card">
+            <div class="card-body">
+                <ul class="list-group">
+                    {{# each this.items}}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ this.item.title }} | {{ this.qty }} Unidades
+                        <span class="badge badge-primary badge-pill">{{ this.price }}</span>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="card-footer">
+                Precio: <strong>${{ this.cart.totalPrice }}</strong>
+            </div>
+        </div>
+        {{/each}}
+        <div>
+            <a href="/" type="button" class="btn btn-primary btn-block btn-lg d-md-none">Regresar a Inicio</a>
+            <a href="/" type="button" class="btn btn-primary btn-block d-none d-md-block">Regresar a Inicio</a>
+        </div>
     </div>
-    <div class="card-footer float-right">Precio: <strong> ${{
-            this.cart.totalPrice }}</strong></div>
-</div>
-{{/each}}
+</body>
+</html>

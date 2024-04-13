@@ -1,3 +1,6 @@
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 module.exports = function cart(oldCart) {
     this.items = oldCart.items || {};
     this.totalQty = oldCart.totalQty || 0;
@@ -29,6 +32,15 @@ module.exports = function cart(oldCart) {
         }
     }
 
+    
+    this.addOne = id => {
+        this.items[id].qty++;
+        this.items[id].price += this.items[id].item.price;
+        this.totalQty++;
+        this.totalPrice += this.items[id].item.price;
+      }
+      
+
     this.removeItem = function (id) {
         this.totalQty -= this.items[id].qty;
         this.totalPrice -= this.items[id].price;
@@ -45,30 +57,29 @@ module.exports = function cart(oldCart) {
 
 };
 
+    // const cartSchema = new Schema({
+    //     items: [{
+    //         producto: {
+    //             type: String,
+    //             required: true
+    //         },
+    //         cantidad: {
+    //             type: Number,
+    //             required: true
+    //         },
+    //         precio: {
+    //             type: Number,
+    //             required: true
+    //         }
+    //     }],
+    //     totalQty: {
+    //         type: Number,
+    //         required: true
+    //     },
+    //     totalPrice: {
+    //         type: Number,
+    //         required: true
+    //     }
+    // });
 
-
-/* const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const bcrypt = require('bcrypt-nodejs');
-
-var cartSchema = new Schema({
-    email: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    }
-});
-
-cartSchema.methods.encryptPassword = password => {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(5), null);
-};
-
-cartSchema.methods.validPassword = function (password) {
-    return bcrypt.compareSync(password, this.password);
-};
-
-
-module.exports = mongoose.model('Cart', cartSchema); */
+    // module.exports = mongoose.model('Cart', cartSchema);

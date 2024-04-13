@@ -1,17 +1,44 @@
-.gallery {
-    width: 15rem;
-}
+                .gallery {
+                width: 15rem;
+                }
 
-.gallery img {
-    max-height: 170px;
-}
+                .gallery img {
+                max-height: 170px;
+                }
 
-.gallery .price {
-    font-weight: bold;
-    font-size: 16px;
-}
+                .gallery .price {
+                font-weight: bold;
+                font-size: 16px;
+                }
 
-.gallery .description{
-    font-size: 13px;
-    font-style: oblique;
-}
+                .gallery .description{
+                font-size: 13px;
+                font-style: oblique;
+                }
+
+        :root{
+            --blanco: #ffffff;
+            --oscuro: #212121;
+            --primario: #ffc107;
+            --secundarioOscuro:#e2b839;;
+            --secundario: #0097a7;
+            --gris:#757575;
+            --azure:#f0ffff; 
+            --grisClaro:#f0f0f0; 
+            --fuentePrincipal: 'Staatliches', cursive;
+        
+           
+        }
+
+        .footer_index{
+
+            text-align: center;
+            margin-top: 35px;
+            margin-bottom: 35px;
+            background-color:var(--primario);
+            padding: 0 0;
+            width: 100%;
+            font-family: var(--fuentePrincipal);
+            text-align: center;
+            
+            }

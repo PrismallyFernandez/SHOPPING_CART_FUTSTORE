@@ -17,10 +17,13 @@ passport.use('local.signup', new LocalStrategy({
     passwordField: 'password',
     passReqToCallback: true
 }, (req, email, password, done) => {
-    req.checkBody('email', 'Invalid Email').notEmpty().isEmail();
-    req.checkBody('password', 'Invalid Password').notEmpty().isLength({
+    req.checkBody('email', 'Correo Inválido').notEmpty().isEmail();
+    req.checkBody('password', 'Contraseña Inválida').notEmpty().isLength({
         min: 5
     });
+    req.checkBody('nombre', 'Nombre is required').notEmpty();
+    req.checkBody('isAdmin');
+    
     const errors = req.validationErrors();
     if (errors) {
         let messages = [];
@@ -37,12 +40,14 @@ passport.use('local.signup', new LocalStrategy({
         }
         if (user) {
             return done(null, false, {
-                'message': 'Email is already in use.'
+                'message': 'Correo en Uso'
             });
         }
         let newUser = new User();
         newUser.email = email;
+        newUser.nombre = req.body.nombre; // Asigna el nombre desde el cuerpo de la solicitud
         newUser.password = newUser.encryptPassword(password);
+        newUser.isAdmin = req.body.isAdmin; // Usa el método de instancia para encriptar la contraseña
         newUser.save((err, res) => {
             if (err) {
                 return done(err);
@@ -57,8 +62,8 @@ passport.use('local.signin', new LocalStrategy({
     passwordField: 'password',
     passReqToCallback: true
 }, (req, email, password, done) => {
-    req.checkBody('email', 'Invalid Email').notEmpty().isEmail();
-    req.checkBody('password', 'Invalid Password').notEmpty();
+    req.checkBody('email', 'Correo Inválido').notEmpty().isEmail();
+    req.checkBody('password', 'Contraseña incorrecta').notEmpty();
     const errors = req.validationErrors();
     if (errors) {
         let messages = [];
@@ -75,15 +80,14 @@ passport.use('local.signin', new LocalStrategy({
         }
         if (!user) {
             return done(null, false, {
-                'message': 'No user found.'
+                'message': 'Usuario No Encontrado.'
             });
         }
         if (!user.validPassword(password)) {
-
             return done(null, false, {
-                'message': 'Wrong password.'
+                'message': 'Contraseña Incorrecta.'
             });
         }
-            return done(null, user);
+        return done(null, user);
     })
 }));
