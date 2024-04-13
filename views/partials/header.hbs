@@ -1,0 +1,50 @@
+<nav class="navbar navbar-dark bg-danger navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img
+            src="https://www.prestashop.com/forums/uploads/monthly_07_2014/post-814040-0-77085700-1406732783.png"
+            width="30" height="30" class="d-inline-block align-top" alt="">
+        Carro de Compras - PRISFER
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+        data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/shopping-cart/">
+                    <i class="fas fa-shopping-cart"></i>Carro <span class="badge badge-light badge-pill">
+                            {{session.cart.totalQty}}
+                            </span>
+                </a>
+            </li>
+            {{# if loggin }}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user-circle"></i> Controlador Usuario
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/user/profile">Cuenta y Compras</a>
+                <a class="dropdown-item" href="/insertar-producto">Productos</a>
+                    <a class="dropdown-item" href="#/user/usuarios">Usuarios</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/user/logout">Salir</a>
+                </div>
+            </li>
+            {{ else }}
+            <li class="nav-item">
+                <a class="nav-link" href="/user/signin">
+                     Login
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/signup">
+                     Sign Up
+                </a>
+            </li>
+            {{/if}}
+        </ul>
+    </div>
+    </nav>
+</nav>
