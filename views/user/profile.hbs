@@ -6,10 +6,13 @@
     <title>Perfil Usuario</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
             margin: 0;
+            margin-bottom:20px;
+
         }
 
         .profile-container {
@@ -30,6 +33,18 @@
         .btn-primary {
             margin-top: 20px;
         }
+
+        @media (max-width: 575px) {
+            .list-group-item {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+
+            .list-group-item img {
+                margin-bottom: 10px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -43,7 +58,11 @@
                 <ul class="list-group">
                     {{# each this.items}}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ this.item.title }} | {{ this.qty }} Unidades
+                        <img src="{{this.item.imagePath}}" class="mr-3"> <!-- Agregué la clase 'mr-3' para margen derecho -->
+                        <div> <!-- Envuelve el contenido para alinear en columna en pantallas pequeñas -->
+                            <div>{{ this.item.title }}</div>
+                            <div>{{ this.qty }} Unidades</div>
+                        </div>
                         <span class="badge badge-primary badge-pill">{{ this.price }}</span>
                     </li>
                     {{/each}}
